@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menü - Dil Seçimi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+
+        .language-grid {
+            display: grid;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .language-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-decoration: none;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .language-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(238, 90, 36, 0.4);
+        }
+
+        .language-btn:active {
+            transform: translateY(-2px);
+        }
+
+        .language-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .language-btn:hover::before {
+            left: 100%;
+        }
+
+        .flag {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .loading {
+            display: none;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer {
+            margin-top: 30px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .language-btn {
+                padding: 18px;
+                font-size: 1.1rem;
+            }
+        }
+
+        /* PDF viewer için modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+        }
+
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 0;
+            width: 90%;
+            height: 90%;
+            max-width: 900px;
+            background: white;
+            border-radius: 10px;
+            margin-top: 5%;
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 35px;
+            font-weight: bold;
+            position: absolute;
+            right: 25px;
+            top: 15px;
+            z-index: 1001;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .pdf-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🍽️</div>
+        <h1>Menümüzü Görüntülemek İçin<br>Dil Seçiniz</h1>
+        
+        <div class="language-grid">
+            <button class="language-btn" onclick="openMenu('tr')">
+                <span class="flag">🇹🇷</span>
+                <span>Türkçe Menü</span>
+            </button>
+            
+            <button class="language-btn" onclick="openMenu('en')">
+                <span class="flag">🇺🇸</span>
+                <span>English Menu</span>
+            </button>
+            
+            <button class="language-btn" onclick="openMenu('ar')">
+                <span class="flag">🇸🇦</span>
+                <span>قائمة عربية</span>
+            </button>
+            
+            <button class="language-btn" onclick="openMenu('de')">
+                <span class="flag">🇩🇪</span>
+                <span>Deutsche Speisekarte</span>
+            </button>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            Menü yükleniyor...
+        </div>
+
+        <div class="footer">
+            📱 Telefonunuzda daha iyi görüntüleme için<br>
+            yatay konuma çevirebilirsiniz
+        </div>
+    </div>
+
+    <!-- PDF Modal -->
+    <div id="pdfModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content">
+            <iframe id="pdfFrame" class="pdf-frame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Menü PDF dosyalarının yolları
+        const menuPaths = {
+            'tr': 'menu-turkish.pdf',
+            'en': 'menu-english.pdf', 
+            'ar': 'menu-arabic.pdf',
+            'de': 'menu-german.pdf'
+        };
+
+        function openMenu(language) {
+            const loading = document.getElementById('loading');
+            const pdfPath = menuPaths[language];
+            
+            // Loading göster
+            loading.style.display = 'block';
+            
+            // PDF'i yeni sekmede aç (mobil uyumlu)
+            if (window.innerWidth <= 768) {
+                // Mobil cihazlarda direkt PDF'i aç
+                window.open(pdfPath, '_blank');
+                loading.style.display = 'none';
+            } else {
+                // Desktop'ta modal içinde göster
+                const modal = document.getElementById('pdfModal');
+                const pdfFrame = document.getElementById('pdfFrame');
+                
+                pdfFrame.src = pdfPath;
+                modal.style.display = 'block';
+                loading.style.display = 'none';
+            }
+            
+            // Analytics için (isteğe bağlı)
+            console.log(`Menü açıldı: ${language}`);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('pdfModal');
+            const pdfFrame = document.getElementById('pdfFrame');
+            
+            modal.style.display = 'none';
+            pdfFrame.src = '';
+        }
+
+        // Modal dışına tıklanınca kapat
+        window.onclick = function(event) {
+            const modal = document.getElementById('pdfModal');
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        // Sayfa yüklendiğinde animasyon
+        window.addEventListener('load', function() {
+            document.querySelector('.container').style.animation = 'fadeInUp 0.6s ease-out';
+        });
+    </script>
+</body>
+</html>
