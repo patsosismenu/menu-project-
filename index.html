@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #a22a16 0%, #fcbe24 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -67,7 +67,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            background: linear-gradient(135deg, #2c3e50, #34495e);
             color: white;
             text-decoration: none;
             border-radius: 15px;
@@ -78,11 +78,13 @@
             cursor: pointer;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
         }
 
         .language-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(238, 90, 36, 0.4);
+            box-shadow: 0 15px 35px rgba(52, 73, 94, 0.4);
+            background: linear-gradient(135deg, #34495e, #2c3e50);
         }
 
         .language-btn:active {
@@ -120,7 +122,7 @@
             width: 20px;
             height: 20px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #ff6b6b;
+            border-top: 3px solid #a22a16;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-right: 10px;
@@ -137,19 +139,71 @@
             font-size: 0.9rem;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 480px) {
             .container {
-                padding: 30px 20px;
+                padding: 25px 15px;
                 margin: 10px;
             }
 
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.3rem;
+                line-height: 1.4;
+            }
+
+            .language-btn {
+                padding: 16px;
+                font-size: 1rem;
+            }
+            
+            .flag {
+                font-size: 1.3rem;
+                margin-right: 12px;
+            }
+        }
+
+        @media (min-width: 481px) and (max-width: 768px) {
+            .container {
+                padding: 35px 25px;
+                max-width: 450px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
             }
 
             .language-btn {
                 padding: 18px;
                 font-size: 1.1rem;
+            }
+        }
+
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .container {
+                padding: 40px 30px;
+                max-width: 500px;
+            }
+
+            .language-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+        }
+
+        @media (min-width: 1025px) {
+            .container {
+                max-width: 550px;
+            }
+
+            .language-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .language-btn {
+                padding: 22px;
+                font-size: 1.3rem;
             }
         }
 
@@ -204,17 +258,17 @@
 <body>
     <div class="container">
         <div class="logo">🍽️</div>
-        <h1>Menümüzü Görüntülemek İçin<br>Dil Seçiniz</h1>
+        <h1>Select Language to View Our Menu</h1>
         
         <div class="language-grid">
-            <button class="language-btn" onclick="openMenu('tr')">
-                <span class="flag">🇹🇷</span>
-                <span>Türkçe Menü</span>
-            </button>
-            
             <button class="language-btn" onclick="openMenu('en')">
                 <span class="flag">🇺🇸</span>
                 <span>English Menu</span>
+            </button>
+            
+            <button class="language-btn" onclick="openMenu('tr')">
+                <span class="flag">🇹🇷</span>
+                <span>Türkçe Menü</span>
             </button>
             
             <button class="language-btn" onclick="openMenu('ar')">
@@ -222,20 +276,20 @@
                 <span>قائمة عربية</span>
             </button>
             
-            <button class="language-btn" onclick="openMenu('de')">
-                <span class="flag">🇩🇪</span>
-                <span>Deutsche Speisekarte</span>
+            <button class="language-btn" onclick="openMenu('ru')">
+                <span class="flag">🇷🇺</span>
+                <span>Русское меню</span>
             </button>
         </div>
 
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            Menü yükleniyor...
+            Loading menu...
         </div>
 
         <div class="footer">
-            📱 Telefonunuzda daha iyi görüntüleme için<br>
-            yatay konuma çevirebilirsiniz
+            📱 For better viewing on mobile<br>
+            you can rotate your device horizontally
         </div>
     </div>
 
@@ -250,10 +304,10 @@
     <script>
         // Menü PDF dosyalarının yolları
         const menuPaths = {
+            'en': 'menu-english.pdf',
             'tr': 'menu-turkish.pdf',
-            'en': 'menu-english.pdf', 
             'ar': 'menu-arabic.pdf',
-            'de': 'menu-german.pdf'
+            'ru': 'menu-russian.pdf'
         };
 
         function openMenu(language) {
@@ -279,7 +333,7 @@
             }
             
             // Analytics için (isteğe bağlı)
-            console.log(`Menü açıldı: ${language}`);
+            console.log(`Menu opened: ${language}`);
         }
 
         function closeModal() {
